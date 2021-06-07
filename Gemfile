@@ -44,3 +44,5 @@ gem "devise-jwt"
 
 gem "dotenv"
 gem "dotenv-rails"
+
+gem "rack-cors"
