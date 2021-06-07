@@ -5,5 +5,5 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable, :jwt_authenticatable, jwt_revocation_strategy: self
 
-  has_many :owned_posts, class_name: "Post", source: :owner
+  has_many :owned_posts, class_name: "Post", foreign_key: :owner, dependent: :destroy
 end
