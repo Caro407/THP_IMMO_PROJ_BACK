@@ -46,3 +46,5 @@ gem "dotenv"
 gem "dotenv-rails"
 
 gem "rack-cors"
+
+gem "faker"
