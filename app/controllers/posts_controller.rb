@@ -1,11 +1,21 @@
 class PostsController < ApplicationController
   before_action :set_post, only: [:show, :update, :destroy]
+  before_action :authenticate_user, only: [:index]
 
   # GET /posts
   def index
     @posts = Post.all
 
-    render json: @posts
+    if !current_user
+      render json: @posts
+    else
+      @posts.to_a.map! do |post|
+        post.as_json.merge({
+          user: post.owner.as_json,
+        })
+      end
+      render json: @posts
+    end
   end
 
   # GET /posts/1
@@ -39,13 +49,14 @@ class PostsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_post
-      @post = Post.find(params[:id])
-    end
 
-    # Only allow a list of trusted parameters through.
-    def post_params
-      params.require(:post).permit(:title, :content, :price)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_post
+    @post = Post.find(params[:id])
+  end
+
+  # Only allow a list of trusted parameters through.
+  def post_params
+    params.require(:post).permit(:title, :content, :price)
+  end
 end
