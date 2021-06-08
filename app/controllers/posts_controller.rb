@@ -1,11 +1,23 @@
 class PostsController < ApplicationController
   before_action :set_post, only: [:show, :update, :destroy]
+  before_action :authenticate_user!, only: [:create]
+  before_action :authenticate_user, only: [:index]
+
 
   # GET /posts
   def index
     @posts = Post.all
+    json = @posts.as_json
 
-    render json: @posts
+    if current_user
+      json = @posts.to_a.map! do |post|
+        post.as_json.merge({
+          user: post.owner.as_json,
+        })
+      end
+    end
+
+    render json: json
   end
 
   # GET /posts/1
@@ -15,7 +27,13 @@ class PostsController < ApplicationController
 
   # POST /posts
   def create
-    @post = Post.new(post_params)
+    @user = current_user
+
+    @post = Post.new(
+              title: post_params[:title],
+              content: post_params[:content],
+              price: post_params[:price],
+              owner: @user)
 
     if @post.save
       render json: @post, status: :created, location: @post
@@ -39,6 +57,7 @@ class PostsController < ApplicationController
   end
 
   private
+
     # Use callbacks to share common setup or constraints between actions.
     def set_post
       @post = Post.find(params[:id])
