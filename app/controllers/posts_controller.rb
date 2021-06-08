@@ -1,5 +1,6 @@
 class PostsController < ApplicationController
   before_action :set_post, only: [:show, :update, :destroy]
+  before_action :authenticate_user!, only: [:create]
   before_action :authenticate_user, only: [:index]
 
 
@@ -26,7 +27,13 @@ class PostsController < ApplicationController
 
   # POST /posts
   def create
-    @post = Post.new(post_params)
+    @user = current_user
+
+    @post = Post.new(
+              title: post_params[:title],
+              content: post_params[:content],
+              price: post_params[:price],
+              owner: @user)
 
     if @post.save
       render json: @post, status: :created, location: @post
