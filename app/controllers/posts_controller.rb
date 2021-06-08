@@ -7,7 +7,7 @@ class PostsController < ApplicationController
   # GET /posts
   def index
     @posts = Post.all
-    json = @post.as_json
+    json = @posts.as_json
 
     if current_user
       json = @posts.to_a.map! do |post|
