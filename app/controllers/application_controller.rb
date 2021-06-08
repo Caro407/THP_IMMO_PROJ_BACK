@@ -5,9 +5,8 @@ class ApplicationController < ActionController::API
 
   def authenticate_user
     if request.headers["Authorization"].present?
-      debugger
       token = request.headers["Authorization"].split(" ").second
-      self.current_user = Warden::JWTAuth::UserDecoder.new.call(token, :user, nil)
+      sign_in Warden::JWTAuth::UserDecoder.new.call(token, :user, nil)
     end
   rescue JWT::DecodeError
     # ignore we want current_user to be nil

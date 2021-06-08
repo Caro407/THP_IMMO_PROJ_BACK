@@ -5,17 +5,17 @@ class PostsController < ApplicationController
   # GET /posts
   def index
     @posts = Post.all
+    json = @post.as_json
 
-    if !current_user
-      render json: @posts
-    else
-      @posts.to_a.map! do |post|
+    if current_user
+      json = @posts.to_a.map! do |post|
         post.as_json.merge({
           user: post.owner.as_json,
         })
       end
-      render json: @posts
     end
+
+    render json: json
   end
 
   # GET /posts/1
