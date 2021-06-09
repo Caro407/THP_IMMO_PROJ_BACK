@@ -39,9 +39,8 @@ class PostsController < ApplicationController
       price: post_params[:price],
       owner: @user,
     )
-    debugger
+
     @post.post_pictures.attach(post_params[:image])
-    debugger
 
     if @post.save
       render json: @post, status: :created, location: @post
