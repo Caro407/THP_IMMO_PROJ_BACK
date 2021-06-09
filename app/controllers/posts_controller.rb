@@ -29,10 +29,14 @@ class PostsController < ApplicationController
     @user = current_user
 
     @post = Post.new(
-              title: post_params[:title],
-              content: post_params[:content],
-              price: post_params[:price],
-              owner: @user)
+      title: post_params[:title],
+      content: post_params[:content],
+      price: post_params[:price],
+      owner: @user,
+    )
+    debugger
+    @post.post_picture.attach(post_params[:image])
+    debugger
 
     if @post.save
       render json: @post, status: :created, location: @post
@@ -64,6 +68,6 @@ class PostsController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def post_params
-    params.require(:post).permit(:title, :content, :price)
+    params.permit(:title, :content, :price, :image, :data)
   end
 end
