@@ -2,11 +2,10 @@ class PostsController < ApplicationController
   before_action :set_post, only: [:show, :update, :destroy]
   before_action :authenticate_user, only: [:index]
 
-
   # GET /posts
   def index
     @posts = Post.all
-    json = @post.as_json
+    json = @posts.as_json
 
     if current_user
       json = @posts.to_a.map! do |post|
@@ -51,13 +50,13 @@ class PostsController < ApplicationController
 
   private
 
-    # Use callbacks to share common setup or constraints between actions.
-    def set_post
-      @post = Post.find(params[:id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_post
+    @post = Post.find(params[:id])
+  end
 
-    # Only allow a list of trusted parameters through.
-    def post_params
-      params.require(:post).permit(:title, :content, :price)
-    end
+  # Only allow a list of trusted parameters through.
+  def post_params
+    params.require(:post).permit(:title, :content, :price)
+  end
 end
