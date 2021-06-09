@@ -6,14 +6,12 @@ class PostsController < ApplicationController
   # GET /posts
   def index
     @posts = Post.all
-    json = @posts.as_json
-
-    if current_user
-      json = @posts.to_a.map! do |post|
-        post.as_json.merge({
-          user: post.owner.as_json,
-        })
-      end
+    json = @posts.to_a.map! do |post|
+      post.as_json.merge({
+        images: post.post_pictures.attachments.map do |attachment|
+          url_for(attachment)
+        end,
+      })
     end
 
     render json: json
@@ -35,7 +33,7 @@ class PostsController < ApplicationController
       owner: @user,
     )
     debugger
-    @post.post_picture.attach(post_params[:image])
+    @post.post_pictures.attach(post_params[:image])
     debugger
 
     if @post.save
