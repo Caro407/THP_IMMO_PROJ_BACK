@@ -56,6 +56,16 @@ class PostsController < ApplicationController
     @post.destroy
   end
 
+  def owner
+    
+    @posts = Post.where(owner: current_user)
+    json = @posts.as_json
+
+    render json: json
+  end
+
+
+
   private
 
     # Use callbacks to share common setup or constraints between actions.
