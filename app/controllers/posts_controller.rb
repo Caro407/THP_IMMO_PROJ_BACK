@@ -3,18 +3,15 @@ class PostsController < ApplicationController
   before_action :authenticate_user!, only: [:create]
   before_action :authenticate_user, only: [:index]
 
-
   # GET /posts
   def index
     @posts = Post.all
-    json = @posts.as_json
-
-    if current_user
-      json = @posts.to_a.map! do |post|
-        post.as_json.merge({
-          user: post.owner.as_json,
-        })
-      end
+    json = @posts.to_a.map! do |post|
+      post.as_json.merge({
+        images: post.post_pictures.attachments.map do |attachment|
+          url_for(attachment)
+        end,
+      })
     end
 
     render json: json
@@ -22,7 +19,14 @@ class PostsController < ApplicationController
 
   # GET /posts/1
   def show
-    render json: @post
+    json = @post.as_json.merge({
+      images: @post.post_pictures.attachments.map do |attachment|
+        url_for(attachment)
+      end,
+      owner: @post.owner.as_json,
+    })
+
+    render json: json
   end
 
   # POST /posts
@@ -30,10 +34,14 @@ class PostsController < ApplicationController
     @user = current_user
 
     @post = Post.new(
-              title: post_params[:title],
-              content: post_params[:content],
-              price: post_params[:price],
-              owner: @user)
+      title: post_params[:title],
+      content: post_params[:content],
+      price: post_params[:price],
+      owner: @user,
+    )
+    debugger
+    @post.post_pictures.attach(post_params[:image])
+    debugger
 
     if @post.save
       render json: @post, status: :created, location: @post
@@ -58,13 +66,13 @@ class PostsController < ApplicationController
 
   private
 
-    # Use callbacks to share common setup or constraints between actions.
-    def set_post
-      @post = Post.find(params[:id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_post
+    @post = Post.find(params[:id])
+  end
 
-    # Only allow a list of trusted parameters through.
-    def post_params
-      params.require(:post).permit(:title, :content, :price)
-    end
+  # Only allow a list of trusted parameters through.
+  def post_params
+    params.permit(:title, :content, :price, :image, :data)
+  end
 end

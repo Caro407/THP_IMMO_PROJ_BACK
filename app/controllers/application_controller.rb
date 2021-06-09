@@ -1,5 +1,6 @@
 class ApplicationController < ActionController::API
   include ActionController::MimeResponds
+  include ActionController::Helpers
 
   respond_to :json
 
@@ -8,8 +9,7 @@ class ApplicationController < ActionController::API
       token = request.headers["Authorization"].split(" ").second
       sign_in Warden::JWTAuth::UserDecoder.new.call(token, :user, nil)
     end
-    rescue JWT::DecodeError
+  rescue JWT::DecodeError
     # ignore we want current_user to be nil
   end
-
 end
