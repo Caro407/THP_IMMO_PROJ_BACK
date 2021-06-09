@@ -19,7 +19,14 @@ class PostsController < ApplicationController
 
   # GET /posts/1
   def show
-    render json: @post
+    json = @post.as_json.merge({
+      images: @post.post_pictures.attachments.map do |attachment|
+        url_for(attachment)
+      end,
+      owner: @post.owner.as_json,
+    })
+
+    render json: json
   end
 
   # POST /posts

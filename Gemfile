@@ -48,3 +48,5 @@ gem "dotenv-rails"
 gem "rack-cors"
 
 gem "faker"
+
+gem "aws-sdk-s3"
