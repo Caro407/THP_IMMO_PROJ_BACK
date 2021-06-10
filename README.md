@@ -28,7 +28,7 @@ Run `rails server` to start the server on local port 3000.
 
 ## Team
 
-[Ariane](https://github.com/arejl)
-[Caroline](https://github.com/Caro407)
-[Emmanuel](https://github.com/EmmanuelQuere)
-[Erwann](https://github.com/erwannlenoach)
+* [Ariane](https://github.com/arejl)
+* [Caroline](https://github.com/Caro407)
+* [Emmanuel](https://github.com/EmmanuelQuere)
+* [Erwann](https://github.com/erwannlenoach)
