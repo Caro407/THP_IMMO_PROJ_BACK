@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   resources :posts
 
   resources :users, only: [:update, :show]
+  get 'owner', to: 'posts#owner'
   get 'profile', to: 'users#profile'
 
   resources :cities, only: [:index]
