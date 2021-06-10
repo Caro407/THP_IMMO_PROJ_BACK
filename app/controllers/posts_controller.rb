@@ -32,12 +32,14 @@ class PostsController < ApplicationController
   # POST /posts
   def create
     @user = current_user
+    @city = City.where(name:post_params[:city]).first
 
     @post = Post.new(
       title: post_params[:title],
       content: post_params[:content],
       price: post_params[:price],
       owner: @user,
+      city_id: @city.id
     )
 
     @post.post_pictures.attach(post_params[:images])
@@ -72,6 +74,6 @@ class PostsController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def post_params
-    params.permit(:title, :content, :price, :data, images: [])
+    params.permit(:title, :content, :price, :city, :data, images: [])
   end
 end
