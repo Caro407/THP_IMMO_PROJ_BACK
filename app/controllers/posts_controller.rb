@@ -40,7 +40,7 @@ class PostsController < ApplicationController
       owner: @user,
     )
 
-    @post.post_pictures.attach(post_params[:image])
+    @post.post_pictures.attach(post_params[:images])
 
     if @post.save
       render json: @post, status: :created, location: @post
@@ -72,6 +72,6 @@ class PostsController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def post_params
-    params.permit(:title, :content, :price, :image, :data)
+    params.permit(:title, :content, :price, :data, images: [])
   end
 end
