@@ -1,5 +1,6 @@
 User.destroy_all
-#Post.destroy_all
+Post.destroy_all
+City.destroy_all
 
 30.times do
   User.create!(email: Faker::Internet.email,
@@ -8,9 +9,9 @@ User.destroy_all
                last_name: Faker::Name.last_name)
 end
 
-  City.create!(name: "Paris", zip_code: "75001")
-  City.create!(name: "Le Conquet",zip_code: "29217")
-  City.create!(name: "Marseille",zip_code: "28000")
+  City.create!(name: "Paris", zip_code: "75000")
+  City.create!(name: "Lyon",zip_code: "69000")
+  City.create!(name: "Marseille",zip_code: "13000")
  
 User.all.each do |user|
 
@@ -20,6 +21,6 @@ User.all.each do |user|
                content: Faker::Lorem.paragraph_by_chars(number: rand(80..150)),
                price: Faker::Number.within(range: 150..1000),
                owner: user,
-               city_id: rand(1..3)
+               city_id: City.all.sample.id
               )
 end
