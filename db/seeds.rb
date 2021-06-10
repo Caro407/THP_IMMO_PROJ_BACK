@@ -20,7 +20,7 @@ User.all.each do |user|
                       content: Faker::Lorem.paragraph_by_chars(number: rand(80..150)),
                       price: Faker::Number.within(range: 150..1000),
                       owner: user,
-                      city_id: City.all.sample.id
+                      city_id: City.all.sample.id)
   exterior_image_index = rand(1..8)
   interior_image_index = rand(1..5)
   post.post_pictures.attach(io: File.open("app/assets/images/default_pictures/exterior/exterior_#{exterior_image_index}.jpg"), filename: "post_picture_#{post.id}")
