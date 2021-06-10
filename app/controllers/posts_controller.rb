@@ -1,6 +1,6 @@
 class PostsController < ApplicationController
   before_action :set_post, only: [:show, :update, :destroy]
-  before_action :authenticate_user!, only: [:create, :owner, :destroy]
+  before_action :authenticate_user!, only: [:create, :owner, :destroy, :update]
   before_action :authenticate_user, only: [:index]
 
   # GET /posts
@@ -53,7 +53,14 @@ class PostsController < ApplicationController
 
   # PATCH/PUT /posts/1
   def update
-    if @post.update(post_params)
+
+    @user = current_user
+    if @post.update(
+      title: post_params[:title],
+      content: post_params[:content],
+      price: post_params[:price]
+    )
+
       render json: @post
     else
       render json: @post.errors, status: :unprocessable_entity
@@ -84,6 +91,6 @@ class PostsController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def post_params
-    params.permit(:title, :content, :price, :city, :data, images: [])
+    params.permit(:post, :id, :title, :content, :price, :city, :data, images: [])
   end
 end
